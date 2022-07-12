@@ -18,11 +18,11 @@
     "colId": "history",
     "containerId": "",
     "name": "host:3000/models",
-    "url": "host:3000/models",
+    "url": "host:3000/products",
     "method": "GET",
     "sortNum": 0,
     "created": "2022-06-29T20:37:03.619Z",
-    "modified": "2022-06-29T20:37:03.637Z",
+    "modified": "2022-07-12T21:48:33.565Z",
     "headers": [],
     "params": [],
     "tests": []
