@@ -1,12 +1,6 @@
 const CustomError = require('../middlewares/customError');
-const { nameRequired, nameLength } = require('../middlewares/errors');
 const { productIdRequired, productQuantityRequired,
   productQuantityNotZero } = require('../middlewares/errors');
-
-const validateName = (name) => {
-  if (!name) throw new CustomError(400, nameRequired);
-  if (name.length < 5) throw new CustomError(422, nameLength);
-};
 
 const validateSales = (sales) => {
   sales.forEach(({ productId, quantity }) => {
@@ -17,5 +11,5 @@ const validateSales = (sales) => {
 };
 
 module.exports = {
-  validateName, validateSales,
+   validateSales,
 }; 
