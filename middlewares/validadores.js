@@ -1,5 +1,5 @@
 const { nameRequired, nameLength, productIdRequired,
-  productQuantityRequired, productQuantityNotZero } = require('./errors');
+  productQuantityRequired, productQuantityNotZero, saleNotFound } = require('./errors');
 const { NotFoundError } = require('./errors');
 
 module.exports = (err, _req, res, _next) => {
@@ -23,6 +23,9 @@ module.exports = (err, _req, res, _next) => {
       break;
     case productQuantityNotZero:
       res.status(422).json({ message });
+      break;
+    case saleNotFound:
+      res.status(404).json({ message });
       break;
     default: res.status(500).json({ message });
   }

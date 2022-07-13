@@ -20,6 +20,33 @@ const registro = async (saleId, productId, quantity) => {
   await db.query(sqlQuery, [saleId, productId, quantity]);
 };
 
+const salesAll = async () => {
+  const sqlQuery = `
+  SELECT sp.sale_id, s.date, sp.product_id, sp.quantity
+  FROM StoreManager.sales_products AS sp
+  INNER JOIN StoreManager.sales AS s
+  ON sp.sale_id = s.id
+  ORDER BY sp.sale_id ASC, sp.product_id ASC;
+  `;
+
+  const [results] = await db.query(sqlQuery);
+
+  return results;
+};
+
+const findById = async (id) => {
+  const sqlQuery = `
+  SELECT s.date, sp.product_id, sp.quantity
+  FROM StoreManager.sales_products AS sp
+  INNER JOIN StoreManager.sales AS s
+  ON sp.sale_id = s.id
+  WHERE id = ?;
+  `;
+
+  const [results] = await db.query(sqlQuery, id);
+  return results;
+};
+
 module.exports = {
-  create, registro,
+  create, registro, salesAll, findById,
 }; 

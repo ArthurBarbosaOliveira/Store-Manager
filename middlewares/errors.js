@@ -10,6 +10,8 @@ const productQuantityRequired = '"quantity" is required';
 
 const productQuantityNotZero = '"quantity" must be greater than or equal to 1';
 
+const saleNotFound = 'Sale not found';
+
 module.exports = {
   NotFoundError,
   nameRequired,
@@ -17,4 +19,5 @@ module.exports = {
   productIdRequired,  
   productQuantityRequired,
   productQuantityNotZero,
+  saleNotFound,
 };

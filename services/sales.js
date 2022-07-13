@@ -2,7 +2,7 @@ const productsModel = require('../models/productsModel');
 const salesModel = require('../models/sales');
 const { validateSales } = require('./validadores');
 const CustomError = require('../middlewares/customError');
-const { NotFoundError } = require('../middlewares/errors');
+const { NotFoundError, saleNotFound } = require('../middlewares/errors');
 
 const registro = async (sales) => {
   validateSales(sales);
@@ -21,6 +21,39 @@ const registro = async (sales) => {
   return { id, itemsSold: sales };
 };
 
+const salesAll = async () => {
+  const results = await salesModel.salesAll();
+
+  const formart = results.map(
+    ({ sale_id: saleId, date, product_id: productId, quantity }) => ({
+      saleId,
+      date,
+      productId,
+      quantity,
+    }),
+  );
+
+  return formart;
+};
+
+const findById = async (id) => {
+  const sales = await salesModel.findById(id);
+
+  if (sales.length < 1) throw new CustomError(404, saleNotFound);
+
+  const formartId = sales.map(
+    ({ date, product_id: productId, quantity }) => ({
+      date,
+      productId,
+      quantity,
+    }),
+  );
+
+  return formartId;
+};
+
 module.exports = {
   registro,
+  salesAll,
+  findById,
 }; 
