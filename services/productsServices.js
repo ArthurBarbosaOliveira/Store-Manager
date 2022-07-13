@@ -1,10 +1,10 @@
 const ProductsModel = require('../models/productsModel');
-const { nameRequired, nameLength } = require('../middlewares/errors');
+const validateName = require('./validadores');
 const { NotFoundError } = require('../middlewares/errors');
+const CustomError = require('../middlewares/customError');
 
 const create = async (name) => {
-  if (!name) throw new Error(nameRequired);
-  if (name.length < 5) throw new Error(nameLength);
+  validateName(name);
   const { insertId } = await ProductsModel.create(name);
   const products = await ProductsModel.productById(insertId);
   return products;
@@ -18,7 +18,7 @@ const productAll = async () => {
 const productById = async (id) => {
   const products = await ProductsModel.productById(id);
 
-  if (!products) throw new Error(NotFoundError);
+  if (!products) throw new CustomError(404, NotFoundError);
 
   return products;
 };
