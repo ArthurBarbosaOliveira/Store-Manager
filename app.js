@@ -2,6 +2,7 @@ require('express-async-errors');
 
 const express = require('express');
 const ProductsRoute = require('./routers/ProductsRoute');
+const Validadores = require('./middlewares/validadores');
 
 const app = express();
 app.use(express.json());
@@ -13,16 +14,7 @@ app.get('/', (_request, response) => {
 
 app.use('/products', ProductsRoute);
 
-app.use((err, _req, res, _next) => {
-  const { message } = err;
-
-  switch (message) {
-    case 'Product not found':
-      res.status(404).json({ message });
-      break;
-    default: res.status(500).json({ message });
-  }
-});
+app.use(Validadores);
 
 // não remova essa exportação, é para o avaliador funcionar
 // você pode registrar suas rotas normalmente, como o exemplo acima

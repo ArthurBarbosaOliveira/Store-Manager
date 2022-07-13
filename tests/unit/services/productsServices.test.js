@@ -1,4 +1,4 @@
-const NotFoundError = require('../../../middlewares/NotFoundError');
+const NotFoundError = require('../../../middlewares/errors');
 const productsModel = require('../../../models/productsModel');
 const productsService = require('../../../services/productsServices');
 const sinon = require('sinon');
