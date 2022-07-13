@@ -31,9 +31,9 @@ const update = async (id, name) => {
   if (!name) throw new CustomError(400, nameRequired);
   if (name.length < 5) throw new CustomError(422, nameLength);
 
-  const { affected } = await ProductsModel.update(id, name);
+  const { affectedRows } = await ProductsModel.update(id, name);
 
-  if (!affected) throw new CustomError(404, NotFoundError);
+  if (!affectedRows) throw new CustomError(404, NotFoundError);
 
   const products = await ProductsModel.productById(id);
 

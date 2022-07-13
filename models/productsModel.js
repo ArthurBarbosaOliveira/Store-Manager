@@ -23,19 +23,19 @@ const productById = async (id) => {
       FROM StoreManager.products
       WHERE id = ?
       ORDER BY id`;
-  const [[product]] = await db.query(sql, [id]);
-    return product;
+  const [[products]] = await db.query(sql, [id]);
+  return products;
 };
   
 const update = async (id, name) => {
-  const sqlQuery = `
+  const sql = `
   UPDATE StoreManager.products
   SET name = ?
   WHERE id = ?;
   `;
 
-  const [result] = await db.query(sqlQuery, [name, id]);
-  return result;
+  const [products] = await db.query(sql, [name, id]);
+  return products;
 };
 
 module.exports = {
