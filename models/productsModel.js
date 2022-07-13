@@ -25,10 +25,22 @@ const productById = async (id) => {
       ORDER BY id`;
   const [[product]] = await db.query(sql, [id]);
     return product;
-  };
+};
+  
+const update = async (id, name) => {
+  const sqlQuery = `
+  UPDATE StoreManager.products
+  SET name = ?
+  WHERE id = ?;
+  `;
+
+  const [result] = await db.query(sqlQuery, [name, id]);
+  return result;
+};
 
 module.exports = {
   productAll,
   productById,
   create,
+  update,
 };

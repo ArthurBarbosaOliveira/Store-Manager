@@ -1,8 +1,9 @@
 const productsModel = require('../models/productsModel');
 const salesModel = require('../models/sales');
 const { validateSales } = require('./validadores');
-const CustomError = require('../middlewares/customError');
-const { NotFoundError, saleNotFound } = require('../middlewares/errors');
+const CustomError = require('../errors/CustomError');
+const { saleNotFound } = require('../errors/errorSales');
+const { NotFoundError } = require('../errors/errorProduct');
 
 const registro = async (sales) => {
   validateSales(sales);

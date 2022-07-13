@@ -1,6 +1,6 @@
-const CustomError = require('../middlewares/customError');
+const CustomError = require('../errors/CustomError');
 const { productIdRequired, productQuantityRequired,
-  productQuantityNotZero } = require('../middlewares/errors');
+  productQuantityNotZero } = require('../errors/errorProduct');
 
 const validateSales = (sales) => {
   sales.forEach(({ productId, quantity }) => {

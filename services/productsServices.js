@@ -1,7 +1,7 @@
 const ProductsModel = require('../models/productsModel');
-const { NotFoundError } = require('../middlewares/errors');
-const CustomError = require('../middlewares/customError');
-const { nameRequired, nameLength } = require('../middlewares/errors');
+const { NotFoundError } = require('../errors/errorProduct');
+const { nameRequired, nameLength } = require('../errors/errorName');
+const CustomError = require('../errors/CustomError');
 
 const productAll = async () => {
   const products = await ProductsModel.productAll();
@@ -9,18 +9,34 @@ const productAll = async () => {
 };
 
 const productById = async (id) => {
-  const products = await ProductsModel.productById(id);
+  const product = await ProductsModel.productById(id);
+
+  if (!product) {
+    throw new CustomError(404, NotFoundError);
+  }
+
+  return product;
+};
+
+const create = async (name) => {  
+  if (!name) throw new CustomError(400, nameRequired);
+  if (name.length < 5) throw new CustomError(422, nameLength);
   
-  if (!products) throw new CustomError(404, NotFoundError);
-  
+  const { insertId } = await ProductsModel.create(name);
+  const products = await ProductsModel.productById(insertId);
   return products;
 };
 
-const create = async (name) => {
-  if (!name) throw new Error(nameRequired);
-  if (name.length < 5) throw new Error(nameLength);
-  const { insertId } = await ProductsModel.create(name);
-  const products = await ProductsModel.productById(insertId);
+const update = async (id, name) => {
+  if (!name) throw new CustomError(400, nameRequired);
+  if (name.length < 5) throw new CustomError(422, nameLength);
+
+  const { affected } = await ProductsModel.update(id, name);
+
+  if (!affected) throw new CustomError(404, NotFoundError);
+
+  const products = await ProductsModel.productById(id);
+
   return products;
 };
 
@@ -28,5 +44,5 @@ module.exports = {
   productAll,
   productById,
   create,
-  
+  update,  
 };
