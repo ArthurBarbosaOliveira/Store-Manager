@@ -4,7 +4,7 @@ const { NotFoundError } = require('../middlewares/errors');
 
 const create = async (name) => {
   if (!name) throw new Error(nameRequired);
-  if (name.nameLength < 5) throw new Error(nameLength);
+  if (name.length < 5) throw new Error(nameLength);
   const { insertId } = await ProductsModel.create(name);
   const products = await ProductsModel.productById(insertId);
   return products;
