@@ -9,7 +9,6 @@ const validateName = (name) => {
 };
 
 const validateSales = (sales) => {
-  console.log(sales);
   sales.forEach(({ productId, quantity }) => {
     if (!productId) throw new CustomError(400, productIdRequired);
     if (quantity === undefined) throw new CustomError(400, productQuantityRequired);
