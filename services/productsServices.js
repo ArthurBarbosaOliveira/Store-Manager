@@ -11,7 +11,7 @@ const productAll = async () => {
 const productById = async (id) => {
   const product = await ProductsModel.productById(id);
 
-  if (!product) {
+  if (product === undefined) {
     throw new CustomError(404, NotFoundError);
   }
 
@@ -45,10 +45,10 @@ const remove = async (id) => {
   const productsId = all.map((product) => product.id);
 
   if (!productsId.includes(Number(id))) throw new CustomError(404, NotFoundError);
+  
+  await ProductsModel.remove(id);
 
-  const { affectedRows } = await ProductsModel.remove(id);
-
-  if (!affectedRows) throw new CustomError(404, NotFoundError);
+  return true;
 };
 
 module.exports = {

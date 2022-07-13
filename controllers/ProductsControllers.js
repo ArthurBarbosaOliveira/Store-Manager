@@ -32,7 +32,7 @@ const remove = async (_request, response) => {
 
   await productsService.remove(id);
 
-  response.status(204).end();
+  response.sendStatus(204);
 };
 
 module.exports = {

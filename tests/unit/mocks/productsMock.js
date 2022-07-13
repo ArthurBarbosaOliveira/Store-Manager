@@ -7,10 +7,12 @@ const productsList = [{
   name: 'Traje de encolhimento',
 }];
 
-const productById = { id: 1, name: 'Martelo de Thor' };
+const productId = { id: 1, name: 'Martelo de Thor' };
 
 const createdProduct = { id: 1, name: 'ProdutoX' };
 
+const updatedProduct = { id: 1, name: 'Martelo do Batman' };
+
 module.exports = {
-  productsList, productById, createdProduct,
-};
+  productsList, productId, createdProduct, updatedProduct,
+}

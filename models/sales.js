@@ -47,6 +47,17 @@ const findById = async (id) => {
   return results;
 };
 
+const remove = async (id) => {
+  const sqlQuery = `
+  DELETE FROM StoreManager.sales
+  WHERE id = ?;
+  `;
+
+  const [results] = await db.query(sqlQuery, id);
+
+  return results;
+};
+
 module.exports = {
-  create, registro, salesAll, findById,
+  create, registro, salesAll, findById, remove,
 }; 

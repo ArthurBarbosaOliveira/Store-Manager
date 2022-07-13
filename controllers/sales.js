@@ -8,21 +8,30 @@ const registro = async (request, response) => {
   response.status(201).json(result);
 };
 
-const salesAll = async (_req, res) => {
+const salesAll = async (request, response) => {
   const result = await salesService.salesAll();
 
-  res.status(200).json(result);
+  response.status(200).json(result);
 };
 
-const findById = async (req, res) => {
-  const { id } = req.params;
+const findById = async (request, response) => {
+  const { id } = request.params;
 
   const result = await salesService.findById(id);
-  res.status(200).json(result);
+  response.status(200).json(result);
+};
+
+const remove = async (request, response) => {
+  const { id } = request.params;
+
+  await salesService.remove(id);
+
+  response.sendStatus(204);
 };
 
 module.exports = {
   registro,
   findById,
   salesAll,
+  remove,
 }; 

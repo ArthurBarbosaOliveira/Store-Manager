@@ -40,7 +40,7 @@ const salesAll = async () => {
 const findById = async (id) => {
   const sales = await salesModel.findById(id);
 
-  if (sales.length < 1) throw new CustomError(404, saleNotFound);
+  if (!sales.length) throw new CustomError(404, saleNotFound);
 
   const formartId = sales.map(
     ({ date, product_id: productId, quantity }) => ({
@@ -53,8 +53,17 @@ const findById = async (id) => {
   return formartId;
 };
 
+const remove = async (id) => {
+  const sales = await salesModel.findById(id);
+
+  if (!sales.length) throw new CustomError(404, saleNotFound);
+
+  await salesModel.remove(id);
+};
+
 module.exports = {
   registro,
   salesAll,
   findById,
+  remove,
 }; 
