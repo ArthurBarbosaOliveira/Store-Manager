@@ -40,9 +40,21 @@ const update = async (id, name) => {
   return products;
 };
 
+const remove = async (id) => {
+  const all = await ProductsModel.productAll();
+  const productsId = all.map((product) => product.id);
+
+  if (!productsId.includes(Number(id))) throw new CustomError(404, NotFoundError);
+
+  const { affectedRows } = await ProductsModel.remove(id);
+
+  if (!affectedRows) throw new CustomError(404, NotFoundError);
+};
+
 module.exports = {
   productAll,
   productById,
   create,
   update,  
+  remove,
 };
