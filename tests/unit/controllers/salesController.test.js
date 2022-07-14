@@ -1,38 +1,86 @@
 const { expect } = require('chai');
 const sinon = require('sinon');
+const salesMock = require('../mocks/salesMock');
+const SalesController = require('../../../controllers/sales');
+const SalesService = require('../../../services/sales');
+const ProductsService = require('../../../services/productsServices');
 
-const db = require('../../../models/connection');
-const productsModel = require('../../../models/productsModel');
-const { productsList, productById } = require('../mocks/productsMock');
+describe('SalesController', () => {
+  beforeEach(() => {
+    sinon.restore();
+  });
 
-describe('productsModel', () => {
-  beforeEach(sinon.restore);
+  describe('#salesAll', () => {
+    it('responde com o status 200', async () => {
+      const req = {};
+      const res = {};
 
-  describe('#productAll', () => {
-    it('deve retornar todos os produtos', async () => {
-      sinon.stub(db, 'query').resolves([productsList]);
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
 
-      const results = await productsModel.productAll();
+      sinon.stub(SalesService, 'salesAll').resolves(salesMock);
 
-      expect(results).to.be.eq(productsList);
+      await SalesController.salesAll(req, res);
+
+      expect(res.status.calledWith(200)).to.be.true;
+    });
+
+    it('responde com um array de objetos', async () => {
+      const req = {};
+      const res = {};
+
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
+
+      sinon.stub(SalesService, 'salesAll').resolves(salesMock);
+
+      await SalesController.salesAll(req, res);
+
+      const funcArg = res.json.args[0][0];
+
+      expect(funcArg).to.be.an('array')
+        .and.to.deep.equal(salesMock);
     });
   });
 
-  describe('#productById', () => {
-    it('deve retornar o produto correspondente ao id', async () => {
-      sinon.stub(db, 'query').resolves([productById]);
+  describe('#findById', () => {
+    it('responde com o status 200', async () => {
+      const req = { params: { id: 1 } };
+      const res = {};
 
-      const results = await productsModel.productById(1);
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
 
-      expect(results).to.be.eq(productById[0]);
+      const expectedArr = salesMock.slice(0, 2).map((s) => ({
+        date: s.date, productId: s.productId, quantity: s.quantity,
+      }));
+
+      sinon.stub(SalesService, 'findById').resolves(expectedArr);
+
+      await SalesController.findById(req, res);
+
+      expect(res.status.calledWith(200)).to.be.true;
     });
 
-    it('deve retornar "undefined" ao não encontrar um produto correspondente ao id', async () => {
-      sinon.stub(db, 'query').resolves([[undefined]]);
+    it('responde com um array de objetos', async () => {
+      const req = { params: { id: 1 } };
+      const res = {};
 
-      const results = await productsModel.productById(1)
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub();
 
-      expect(results).to.be.equal(undefined);
+      const expectedArr = salesMock.slice(0, 2).map((s) => ({
+        date: s.date, productId: s.productId, quantity: s.quantity,
+      }));
+
+      sinon.stub(SalesService, 'findById').resolves(expectedArr);
+
+      await SalesController.findById(req, res);
+
+      const funcArg = res.json.args[0][0];
+
+      expect(funcArg).to.be.an('array')
+        .and.to.deep.equal(expectedArr);
     });
   });
 });

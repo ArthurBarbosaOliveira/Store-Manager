@@ -20,14 +20,13 @@ describe('ProductsModel', () => {
 
   describe('#productById', () => {
     it('deve retornar o produto correspondente ao id', async () => {
-      sinon.stub(db, 'query').resolves([productId]);
+      sinon.stub(db, 'query').resolves([[ productId ]]);
 
       const VALID_ID = 1;
       const response = await ProductsModel.productById(VALID_ID);
 
       expect(response).to.be.an('object');
-      expect(response).to.have.all.keys('id', 'name');
-      expect(response).to.be.eq(productId);
+      expect(response).to.be.equal(productId)
     });
 
     it('deve retornar "undefined" ao não encontrar um produto correspondente ao id', async () => {

@@ -4,12 +4,13 @@ const chaiAsPromised = require('chai-as-promised');
 
 
 const ProductsModel = require('../../../models/productsModel');
-const { productsList, productById, createdProduct, updatedProduct } = require('../../mocks/productsMock');
+const { productsList, productId, createdProduct, updatedProduct } = require('../mocks/productsMock');
 const ProductsService = require('../../../services/productsServices');
 
 const CustomError = require('../../../errors/CustomError');
 const { NotFoundError } = require('../../../errors/errorProduct');
 const { nameRequired, nameLength } = require('../../../errors/errorName');
+const productsMock = require('../mocks/productsMock');
 
 use(chaiAsPromised);
 
@@ -29,14 +30,14 @@ describe('ProductsService', () => {
 
   describe('#productById', () => {
     it('deve retornar o produto correspondente ao id', async () => {
-      sinon.stub(ProductsModel, 'productById').resolves(productById);
+      sinon.stub(ProductsModel, 'productById').resolves(productId);
 
       const VALID_ID = 1;
       const response = await ProductsModel.productById(VALID_ID);
 
       expect(response).to.be.an('object');
       expect(response).to.have.all.keys('id', 'name');
-      expect(response).to.be.eq(productById);
+      expect(response).to.be.equal(productId);
     });
 
     it('deve retornar um erro ao não encontrar um produto correspondente ao id', async () => {
@@ -158,7 +159,7 @@ describe('ProductsService', () => {
       expect(response).to.have.property('affectedRows', 1);
     });
     it('deve retornar erro ao tentar deletar um produto com id inválido', async () => {
-      sinon.stub(ProductsModel, 'getAll').resolves(productsList);
+      sinon.stub(ProductsModel, 'productAll').resolves(productsList);
       const INVALID_ID = 3;
 
       try {

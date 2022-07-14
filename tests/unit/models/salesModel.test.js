@@ -1,41 +1,44 @@
-const { expect, use } = require('chai');
+const { expect } = require('chai');
 const sinon = require('sinon');
-const chaiAsPromised = require('chai-as-promised')
 
-const productsModel = require('../../../models/productsModel');
-const productsService = require('../../../services/productsServices');
-const { productsList, productId } = require('../mocks/productsMock');
+const salesMock = require('../mocks/salesMock');
+const db = require('../../../models/connection');
+const SalesModel = require('../../../models/sales');
 
-const CustomError = require('../../../errors/CustomError');
+describe('SalesModel', () => {
+  beforeEach(() => {
+    sinon.restore();
+  });
 
-use(chaiAsPromised);
+  describe('#salesAll', () => {
+    it('retorna um array de objetos', async () => {
+      sinon.stub(db, 'query').resolves([salesMock]);
 
-describe('productsService', () => {
-  beforeEach(sinon.restore);
+      const sales = await SalesModel.salesAll();
 
-  describe('#getAll', () => {
-    it('deve retornar todos os produtos', async () => {
-      sinon.stub(productsModel, 'getAll').resolves(productsList);
-
-      const results = await productsService.getAll();
-
-      expect(results).to.be.eq(productsList);
+      expect(sales).to.be.an('array')
+        .and.to.deep.equal(salesMock);
     });
   });
 
   describe('#findById', () => {
-    it('deve retornar o produto correspondente ao id', async () => {
-      sinon.stub(productsModel, 'findById').resolves(productId[0]);
+    it('retorna um array de objetos sem id', async () => {
+      sinon.stub(db, 'query').resolves([salesMock.slice(0, 2).map((s) => ({
+        date: s.date, productId: s.productId, quantity: s.quantity,
+      }))]);
 
-      const results = await productsModel.findById(1);
+      const sales = await SalesModel.findById();
 
-      expect(results).to.be.eq(productId[0]);
-    });
+      expect(sales).to.be.an('array');
 
-    it('deve retornar um erro ao não encontrar um produto correspondente ao id', () => {
-      sinon.stub(productsModel, 'findById').resolves(false);
-
-      expect(productsService.findById(1)).to.be.rejectedWith(CustomError);
+      sales.forEach((sale) => {
+        expect(sale).to.be.an('object');
+        expect(sale).not.to.have.property('saleId');
+        expect(sale).to.have.property('date');
+        expect(sale).to.have.property('productId');
+        expect(sale).to.have.property('quantity');
+      });
     });
   });
-}); 
+});
+
